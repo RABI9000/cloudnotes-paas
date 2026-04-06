@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CloudNotes — A cloud-native task management app deployed on Google App Engine (PaaS). Demonstrates Platform as a Service cloud computing model.">
+  <title>CloudNotes — PaaS on Google App Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-gradient"></div>
+  <div class="bg-grid"></div>
+  <div class="floating-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <!-- Main App -->
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header" id="app-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M8 10C8 8 10 6 14 6H18C22 6 24 8 24 10V12C26 12 28 14 28 16C28 18 26 20 24 20H8C6 20 4 18 4 16C4 14 6 12 8 12V10Z" fill="url(#cloud-grad)" opacity="0.9"/>
+              <path d="M12 22V26M16 20V28M20 22V26" stroke="url(#rain-grad)" stroke-width="2" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="cloud-grad" x1="4" y1="6" x2="28" y2="20">
+                  <stop stop-color="#a78bfa"/>
+                  <stop offset="1" stop-color="#6366f1"/>
+                </linearGradient>
+                <linearGradient id="rain-grad" x1="12" y1="20" x2="20" y2="28">
+                  <stop stop-color="#818cf8"/>
+                  <stop offset="1" stop-color="#c4b5fd"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div>
+            <h1>CloudNotes</h1>
+            <p class="subtitle">Platform as a Service · Google App Engine</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="status-badge" id="status-badge">
+            <span class="status-dot"></span>
+            <span class="status-text">Connected</span>
+          </div>
+          <button class="btn btn-primary" id="btn-new-note" onclick="openModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New Note
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar" id="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div>
+          <span class="stat-value" id="stat-total">0</span>
+          <span class="stat-label">Total Notes</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+          <span class="stat-value" id="stat-platform">GAE</span>
+          <span class="stat-label">Platform</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <span class="stat-value" id="stat-uptime">--</span>
+          <span class="stat-label">Last Sync</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div>
+          <span class="stat-value" id="stat-model">PaaS</span>
+          <span class="stat-label">Service Model</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Notes Grid -->
+    <main class="notes-section">
+      <div class="notes-grid" id="notes-grid">
+        <!-- Notes will be rendered here -->
+      </div>
+      <div class="empty-state" id="empty-state" style="display:none;">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <h3>No notes yet</h3>
+        <p>Click "New Note" to create your first cloud note!</p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>☁️ <strong>CloudNotes</strong> — Deployed on <strong>Google App Engine</strong> (PaaS)</p>
+        <p class="footer-sub">Cloud Computing Lab 9 · Platform as a Service Demonstration</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal: Create / Edit Note -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" id="note-modal">
+      <div class="modal-header">
+        <h2 id="modal-title">Create New Note</h2>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="note-form" onsubmit="handleSubmit(event)">
+        <input type="hidden" id="note-id">
+        <div class="form-group">
+          <label for="note-title">Title</label>
+          <input type="text" id="note-title" placeholder="Enter note title..." required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="note-content">Content</label>
+          <textarea id="note-content" placeholder="Write your note here..." rows="5"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <div class="color-picker" id="color-picker">
+            <button type="button" class="color-swatch active" data-color="#6c5ce7" style="background:#6c5ce7"></button>
+            <button type="button" class="color-swatch" data-color="#00b894" style="background:#00b894"></button>
+            <button type="button" class="color-swatch" data-color="#e17055" style="background:#e17055"></button>
+            <button type="button" class="color-swatch" data-color="#0984e3" style="background:#0984e3"></button>
+            <button type="button" class="color-swatch" data-color="#fdcb6e" style="background:#fdcb6e"></button>
+            <button type="button" class="color-swatch" data-color="#e84393" style="background:#e84393"></button>
+            <button type="button" class="color-swatch" data-color="#00cec9" style="background:#00cec9"></button>
+            <button type="button" class="color-swatch" data-color="#636e72" style="background:#636e72"></button>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Save Note
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

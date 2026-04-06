@@ -1,0 +1,23 @@
+# Node dependencies
+node_modules/
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+LICENSE
+*.md
+
+# Development files
+.env
+.env.local

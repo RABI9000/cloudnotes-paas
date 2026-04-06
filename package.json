@@ -1,0 +1,20 @@
+{
+  "name": "cloudnotes-paas",
+  "version": "1.0.0",
+  "description": "CloudNotes — A task management app deployed on Google App Engine (PaaS)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["paas", "google-app-engine", "cloud-computing", "notes", "task-manager"],
+  "author": "Cloud Computing Lab",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.0",
+    "uuid": "^10.0.0"
+  }
+}
