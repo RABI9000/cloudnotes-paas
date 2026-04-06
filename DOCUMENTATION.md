@@ -143,10 +143,9 @@ Verify the installation:
 brew --version
 ```
 
-Expected output:
-```
-Homebrew 4.x.x
-```
+**Terminal Output:**
+
+![Homebrew version check](screenshots/t01_brew_version.png)
 
 ---
 
@@ -165,11 +164,9 @@ node --version
 npm --version
 ```
 
-Expected output:
-```
-v22.x.x
-10.x.x
-```
+**Terminal Output:**
+
+![Node.js and npm version check](screenshots/t02_node_npm.png)
 
 ---
 
@@ -187,10 +184,9 @@ Verify:
 git --version
 ```
 
-Expected output:
-```
-git version 2.x.x
-```
+**Terminal Output:**
+
+![Git version check](screenshots/t03_git_version.png)
 
 ---
 
@@ -208,7 +204,15 @@ Authenticate with your GitHub account:
 gh auth login
 ```
 
-Follow the prompts to authenticate via the browser.
+Verify:
+
+```bash
+gh --version
+```
+
+**Terminal Output:**
+
+![GitHub CLI version check](screenshots/t04_gh_version.png)
 
 ---
 
@@ -275,7 +279,7 @@ let notes = [
   {
     id: uuidv4(),
     title: 'Welcome to CloudNotes ☁️',
-    content: 'This app is running on a PaaS platform. Try creating, editing, or deleting notes!',
+    content: 'This app is running on a PaaS platform.',
     color: '#6c5ce7',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -284,18 +288,50 @@ let notes = [
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'healthy', service: 'CloudNotes PaaS', noteCount: notes.length });
+  res.json({
+    status: 'healthy',
+    service: 'CloudNotes PaaS',
+    noteCount: notes.length
+  });
 });
 
-// API Routes: GET, POST, PUT, DELETE for /api/notes
-// ... (full CRUD implementation)
+// GET all notes
+app.get('/api/notes', (req, res) => {
+  const sorted = [...notes].sort((a, b) =>
+    new Date(b.updatedAt) - new Date(a.updatedAt));
+  res.json({ success: true, data: sorted, count: sorted.length });
+});
+
+// POST create note
+app.post('/api/notes', (req, res) => {
+  const note = {
+    id: uuidv4(), ...req.body,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  notes.push(note);
+  res.status(201).json({ success: true, data: note });
+});
+
+// PUT update note
+app.put('/api/notes/:id', (req, res) => {
+  const index = notes.findIndex(n => n.id === req.params.id);
+  if (index === -1) return res.status(404).json({ success: false });
+  notes[index] = { ...notes[index], ...req.body,
+    updatedAt: new Date().toISOString() };
+  res.json({ success: true, data: notes[index] });
+});
+
+// DELETE note
+app.delete('/api/notes/:id', (req, res) => {
+  notes = notes.filter(n => n.id !== req.params.id);
+  res.json({ success: true });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 ```
-
-> **Note:** The complete source code with all CRUD routes is available in the `server.js` file in the project repository.
 
 ---
 
@@ -306,6 +342,10 @@ Create a `public/` directory containing:
 - **`index.html`** — The main Single Page Application with a modern glassmorphism dark-mode UI
 - **`style.css`** — Complete design system with animations, responsiveness, and premium styling
 - **`app.js`** — Frontend JavaScript handling API calls, modal forms, toast notifications, and dynamic rendering
+
+```bash
+mkdir public
+```
 
 The frontend provides a complete note management interface with:
 - Create, Read, Update, Delete operations
@@ -323,11 +363,9 @@ Install the required Node.js packages:
 npm install
 ```
 
-Output:
-```
-added 69 packages, and audited 70 packages in 1s
-found 0 vulnerabilities
-```
+**Terminal Output:**
+
+![npm install output](screenshots/t05_npm_install.png)
 
 ---
 
@@ -339,18 +377,23 @@ Start the server:
 npm start
 ```
 
-Output:
-```
-╔══════════════════════════════════════════════╗
-║   ☁️  CloudNotes PaaS — Server Running       ║
-║   🌐 http://localhost:8080                   ║
-║   📦 Platform: Google App Engine (PaaS)      ║
-╚══════════════════════════════════════════════╝
+**Terminal Output:**
+
+![npm start server running](screenshots/t06_npm_start.png)
+
+Open another terminal and test the health check API:
+
+```bash
+curl -s http://localhost:8080/health | python3 -m json.tool
 ```
 
-Open `http://localhost:8080` in a browser to verify the application works locally.
+**Terminal Output:**
 
-**Screenshot — Application Running Locally:**
+![Health check API response](screenshots/t07_health_check.png)
+
+Open `http://localhost:8080` in a browser to verify the application works locally:
+
+**Browser — Application Running Locally:**
 
 ![Application running locally on localhost:8080](screenshots/01_app_local.png)
 
@@ -376,12 +419,9 @@ git add -A
 git commit -m "CloudNotes PaaS - initial commit"
 ```
 
-Output:
-```
-Initialized empty Git repository in /Users/rabi/cc 9/.git/
-[master (root-commit) 47f0505] CloudNotes PaaS - initial commit
- 10 files changed, 2694 insertions(+)
-```
+**Terminal Output:**
+
+![Git init and commit output](screenshots/t08_git_init.png)
 
 ---
 
@@ -393,13 +433,9 @@ Create a new public repository on GitHub and push the code:
 gh repo create cloudnotes-paas --public --source=. --push
 ```
 
-Output:
-```
-✓ Created repository RABI9000/cloudnotes-paas on github.com
-  https://github.com/RABI9000/cloudnotes-paas
-✓ Added remote https://github.com/RABI9000/cloudnotes-paas.git
-✓ Pushed commits to https://github.com/RABI9000/cloudnotes-paas.git
-```
+**Terminal Output:**
+
+![GitHub repo creation and push](screenshots/t09_gh_push.png)
 
 ---
 
@@ -450,9 +486,9 @@ Set the following configuration:
 
 3. Wait for the deployment to complete (approximately 1-2 minutes)
 
-**Screenshot — Render Dashboard showing successful deployment:**
+**Render Dashboard — Deployment Status: Live ✅**
 
-![Render Dashboard showing deployed service](screenshots/02_render_dashboard.png)
+![Render Dashboard showing deployed service with build logs](screenshots/02_render_dashboard.png)
 
 ---
 
@@ -462,9 +498,9 @@ Once deployed, the application is available at:
 
 **🔗 https://cloudnotes-paas.onrender.com**
 
-**Screenshot — Render Project Services page showing "Deployed" status:**
+**Render Project — Services page showing "Deployed" status:**
 
-![Render Services page](screenshots/05_render_services.png)
+![Render Services page showing cloudnotes-paas deployed](screenshots/05_render_services.png)
 
 ---
 
@@ -477,17 +513,17 @@ Open `https://cloudnotes-paas.onrender.com` in a browser and verify:
 - Notes can be created, edited, and deleted
 - Toast notifications appear for all operations
 
-**Screenshot — Live application running on Render.com:**
+**Browser — Live application running on Render.com:**
 
-![Live application](screenshots/03_app_live.png)
+![Live application with glassmorphism UI](screenshots/03_app_live.png)
 
 **b) Test the health check endpoint:**
 
 Open `https://cloudnotes-paas.onrender.com/health` in a browser:
 
-**Screenshot — Health check JSON response:**
+**Browser — Health check JSON response:**
 
-![Health check endpoint](screenshots/07_health_check.png)
+![Health check endpoint returning JSON](screenshots/07_health_check.png)
 
 The health check returns:
 ```json
@@ -515,12 +551,19 @@ cloudnotes-paas/
 ├── README.md              # Project readme
 ├── DOCUMENTATION.md       # This lab report
 ├── screenshots/           # Screenshots for documentation
+│   ├── t01_brew_version.png
+│   ├── t02_node_npm.png
+│   ├── t03_git_version.png
+│   ├── t04_gh_version.png
+│   ├── t05_npm_install.png
+│   ├── t06_npm_start.png
+│   ├── t07_health_check.png
+│   ├── t08_git_init.png
+│   ├── t09_gh_push.png
 │   ├── 01_app_local.png
 │   ├── 02_render_dashboard.png
 │   ├── 03_app_live.png
-│   ├── 04_create_note_modal.png
 │   ├── 05_render_services.png
-│   ├── 06_app_live_final.png
 │   └── 07_health_check.png
 └── public/
     ├── index.html         # Frontend SPA
